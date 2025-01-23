@@ -1,21 +1,19 @@
 {
-    "name": "filter",
-    "description": "Short description of the filter",
+    "name": "BMPDemo",
+    "description": "This is a fosdem demo",
     "filters": [
         "base_filter"
     ],
-    "help": "Long description of the filter.",
+    "help": "This filter handles a small subset of BMP images with little checking.",
     "support": [
-        "audio",
-        "video"
+        "image"
     ],
     "filter_source": {
         "base_filter": "base_filter.c"
     },
-    "Format": ["Audio", "Video"],
+    "Format": ["Image"],
     "extension":{
-      "ext1" : "audio",
-      "ext2" : "video"
+      "bmp" : "image"
     },
     "licence_required":false
 }
