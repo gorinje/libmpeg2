@@ -1,0 +1,22 @@
+{
+    "name": "libmpeg2",
+    "description": "MPEG-1 and MPEG-2 video decoders.",
+    "filters": [
+        "libmpeg2dec"
+    ],
+    "help": "This filter decodes MPEG-1 and MPEG-2 video using libmpeg2.",
+    "support": [
+        "video"
+    ],
+    "sources":"https://bevara.ddns.net/sources/libmpeg2.accessor",
+    "filter_source": {
+        "libmpeg2dec": "dec_libmpeg2.c",
+        "rfmpgvid" : "reframe_mpegvid.c",
+        "m2psdmx" : "dmx_mpegps.c"
+    },
+    "Format": ["MPEG Video", "MPEG-PS"],
+    "extension":{
+      "mpg" : "canvas"
+    },
+    "licence_required":false
+}

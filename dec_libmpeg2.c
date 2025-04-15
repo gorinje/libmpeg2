@@ -18,13 +18,13 @@ typedef struct
 	mpeg2dec_t *decoder;
 } GF_BaseFilter;
 
-static void base_filter_finalize(GF_Filter *filter)
+static void libmpeg2dec_finalize(GF_Filter *filter)
 {
 	GF_BaseFilter *ctx = (GF_BaseFilter *) gf_filter_get_udta(filter);
 	if (ctx->decoder) mpeg2_close(ctx->decoder);
 }
 
-static GF_Err BMP1BPP_filter_process(GF_Filter *filter)
+static GF_Err libmpeg2dec_process(GF_Filter *filter)
 {
 	u8 *data_dst;
 	u8 *data_src;
@@ -91,7 +91,7 @@ static GF_Err BMP1BPP_filter_process(GF_Filter *filter)
 
 }
 
-static GF_Err BMP1BPP_filter_config_input(GF_Filter *filter, GF_FilterPid *pid, Bool is_remove)
+static GF_Err libmpeg2dec_config_input(GF_Filter *filter, GF_FilterPid *pid, Bool is_remove)
 {
 	const GF_PropertyValue *p;
 	GF_Err e;
@@ -127,12 +127,12 @@ static GF_Err BMP1BPP_filter_config_input(GF_Filter *filter, GF_FilterPid *pid, 
 	return GF_OK;
 }
 
-static GF_Err base_filter_update_arg(GF_Filter *filter, const char *arg_name, const GF_PropertyValue *arg_val)
+static GF_Err libmpeg2dec_update_arg(GF_Filter *filter, const char *arg_name, const GF_PropertyValue *arg_val)
 {
 	return GF_OK;
 }
 
-GF_Err base_filter_initialize(GF_Filter *filter)
+GF_Err libmpeg2dec_initialize(GF_Filter *filter)
 {
 	GF_BaseFilter *stack = gf_filter_get_udta(filter);
 	
@@ -142,15 +142,7 @@ GF_Err base_filter_initialize(GF_Filter *filter)
 	return GF_OK;
 }
 
-#define OFFS(_n)	#_n, offsetof(GF_BaseFilter, _n)
-static const GF_FilterArgs ExampleFilterArgs[] =
-{
-	//example uint option using enum, result parsed ranges from 0(=v1) to 2(=v3)
-	
-	{ NULL }
-};
-
-static const GF_FilterCapability BMP1BPPFullCaps[] =
+static const GF_FilterCapability LIBMPEG2FullCaps[] =
 {
 	CAP_UINT(GF_CAPS_INPUT,GF_PROP_PID_STREAM_TYPE, GF_STREAM_VISUAL),
 	CAP_UINT(GF_CAPS_INPUT,GF_PROP_PID_CODECID, GF_CODECID_MPEG1),
@@ -159,23 +151,22 @@ static const GF_FilterCapability BMP1BPPFullCaps[] =
 	CAP_UINT(GF_CAPS_OUTPUT, GF_PROP_PID_CODECID, GF_CODECID_RAW),
 };
 
-const GF_FilterRegister BMP1BPPRegister = {
-	.name = "BMPDemo",
-	GF_FS_SET_DESCRIPTION("BMP 1BPP")
-	GF_FS_SET_HELP("This is a fosdem demo")
+const GF_FilterRegister LIBMPEG2Register = {
+	.name = "libmpeg2dec",
+	GF_FS_SET_DESCRIPTION("MPEG-1 and MPEG-2 video decoders")
+	GF_FS_SET_HELP("This filter decodes MPEG-1 and MPEG-2 video streams using libmpeg2.")
 	.private_size = sizeof(GF_BaseFilter),
 	.args = NULL,
-	.initialize = base_filter_initialize,
-	.finalize = base_filter_finalize,
-	SETCAPS(BMP1BPPFullCaps),
-	.process = BMP1BPP_filter_process,
-	.configure_pid = BMP1BPP_filter_config_input,
-	.priority = 1
+	.initialize = libmpeg2dec_initialize,
+	.finalize = libmpeg2dec_finalize,
+	SETCAPS(LIBMPEG2FullCaps),
+	.process = libmpeg2dec_process,
+	.configure_pid = libmpeg2dec_config_input
 };
 
-const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_BMP1BPP_register(GF_FilterSession *session)
+const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_libmpeg2_register(GF_FilterSession *session)
 {
-	return &BMP1BPPRegister;
+	return &LIBMPEG2Register;
 }
 
 
